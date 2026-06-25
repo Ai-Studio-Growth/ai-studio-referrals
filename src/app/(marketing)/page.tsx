@@ -14,6 +14,9 @@ import {
 import { LogoMark } from '@/components/logo';
 import { Reveal, HeroPreview, FunnelMock, RewardMock } from '@/components/landing';
 
+// Render dynamically — Hostinger's managed runtime mis-serves prerendered static pages (503).
+export const dynamic = 'force-dynamic';
+
 const trust = [
   { value: '82%', label: 'of buyers trust referrals from people they know', src: 'Nielsen' },
   { value: '5×', label: 'lower CAC than paid acquisition channels', src: 'HubSpot' },
