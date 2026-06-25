@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens — single source of truth for color, radius, and depth.
+ * Light is the default; `.dark` flips the palette. White-label branding can
+ * override --brand / --accent / --radius at the org level (see BrandProvider).
+ */
+:root {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --bg: 240 20% 99%;
+  --surface: 0 0% 100%;
+  --surface-2: 240 20% 97%;
+  --border: 240 14% 90%;
+  --fg: 240 24% 12%;
+  --muted: 240 8% 46%;
+
+  --brand: 252 96% 66%;
+  --brand-fg: 0 0% 100%;
+  --accent: 36 96% 55%;
+  --success: 152 62% 42%;
+  --warning: 38 92% 52%;
+  --danger: 356 78% 58%;
+}
+
+.dark {
+  --bg: 240 28% 7%;
+  --surface: 240 22% 11%;
+  --surface-2: 240 20% 14%;
+  --border: 240 16% 22%;
+  --fg: 240 30% 96%;
+  --muted: 240 12% 64%;
+
+  --brand: 252 96% 72%;
+  --brand-fg: 240 30% 8%;
+  --accent: 36 96% 58%;
+  --success: 152 58% 52%;
+  --warning: 38 92% 60%;
+  --danger: 356 82% 66%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--bg));
+  color: hsl(var(--fg));
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  /* Soft glassmorphism card */
+  .glass {
+    @apply rounded-2xl border bg-surface/70 backdrop-blur-xl shadow-soft;
+    background-image: linear-gradient(180deg, hsl(var(--surface) / 0.85), hsl(var(--surface) / 0.55));
+  }
+
+  .glass-strong {
+    @apply rounded-2xl border bg-surface shadow-soft;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-brand {
+    @apply btn bg-brand-gradient text-brand-fg shadow-glow hover:brightness-110 active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply btn border bg-surface/60 hover:bg-surface-2;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium;
+  }
+
+  /* Faint grid backdrop for modern hero sections */
+  .bg-grid {
+    background-image: linear-gradient(hsl(var(--fg) / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--fg) / 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 50%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 50%, transparent 100%);
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded-lg bg-surface-2;
+  }
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    background-image: linear-gradient(90deg, transparent, hsl(var(--fg) / 0.06), transparent);
+  }
+}
+
+/* Respect reduced motion for all the count-ups, confetti, transitions */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 999px;
+}

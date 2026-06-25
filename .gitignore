@@ -1,0 +1,25 @@
+/node_modules
+/.next
+/out
+/build
+*.log
+npm-debug.log*
+
+# env
+.env
+.env*.local
+
+# prisma / sqlite
+/prisma/*.db
+/prisma/*.db-journal
+/prisma/dev.db*
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea
+*.tsbuildinfo
+next-env.d.ts
+
+# local tooling (machine-specific absolute paths)
+.claude/
