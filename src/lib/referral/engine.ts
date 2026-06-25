@@ -3,6 +3,7 @@ import { generateCode, hashValue } from './codes';
 import { resolveRewards } from './rewards';
 import { evaluateConversion, worstSeverity, looksLikeValidEmail } from './fraud';
 import { emit } from '@/lib/adapters/messaging';
+import { dispatchOrgWebhooks } from '@/lib/webhooks';
 import type { Prisma } from '@prisma/client';
 
 /**
@@ -271,6 +272,17 @@ export async function recordConversion(args: {
       data: { campaign: campaign.name, conversionId: result.conversionId },
     });
   }
+
+  // Fan out to the org's registered webhook endpoints (signed, fire-and-forget).
+  void dispatchOrgWebhooks(campaign.orgId, 'conversion.recorded', {
+    conversionId: result.conversionId,
+    campaignId: campaign.id,
+    campaign: campaign.name,
+    event: args.event,
+    valueCents,
+    status: result.status,
+    rewardsIssued: result.rewardsIssued,
+  });
 
   return { ok: true, ...result, flagged: severity };
 }

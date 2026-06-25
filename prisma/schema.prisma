@@ -45,6 +45,7 @@ model Org {
   accounts     Account[]
   integrations Integration[]
   notifications Notification[]
+  webhookEndpoints WebhookEndpoint[]
 }
 
 // ─── Authentication ──────────────────────────────────────────────────────────
@@ -265,6 +266,36 @@ model PlatformSetting {
   label     String?
   type      String   @default("text") // text | number | boolean
   updatedAt DateTime @updatedAt
+}
+
+// ─── Outbound webhooks (advertiser-managed) ──────────────────────────────────
+
+model WebhookEndpoint {
+  id        String   @id @default(cuid())
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  url       String
+  secret    String   // HMAC signing secret (shown once on creation)
+  events    String   @default("*") // comma-separated event names, or "*" for all
+  status    String   @default("active") // active | disabled
+  createdAt DateTime @default(now())
+
+  deliveries WebhookDelivery[]
+
+  @@index([orgId])
+}
+
+model WebhookDelivery {
+  id         String   @id @default(cuid())
+  endpointId String
+  endpoint   WebhookEndpoint @relation(fields: [endpointId], references: [id], onDelete: Cascade)
+  event      String
+  status     String   @default("pending") // pending | success | failed
+  statusCode Int?
+  error      String?
+  createdAt  DateTime @default(now())
+
+  @@index([endpointId, createdAt])
 }
 
 // A lightweight in-product community feed (announcements + member posts).
