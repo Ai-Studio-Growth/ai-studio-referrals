@@ -3,6 +3,9 @@ import { Rocket, Megaphone, Gift, Plug, Code2, ShieldCheck, HelpCircle } from 'l
 
 export const metadata = { title: 'Docs & Help · Ai Studio Referrals' };
 
+// Render dynamically — Hostinger's managed runtime mis-serves prerendered static pages (503).
+export const dynamic = 'force-dynamic';
+
 const sections = [
   {
     id: 'getting-started',
