@@ -239,10 +239,10 @@ in code. Unconfigured adapters fall back to safe **console stubs** so the app al
 ## 🚀 Production notes
 
 - **Deploy:** see **[DEPLOY-HOSTINGER.md](DEPLOY-HOSTINGER.md)** — step-by-step for Hostinger
-  (Node.js app) + Neon Postgres, with GitHub Actions auto-deploy over SSH.
-- **Postgres**: the Prisma datasource is `postgresql` (with `DATABASE_URL` pooled +
-  `DIRECT_URL` direct for migrations). Local dev needs a Postgres URL too (a free Neon branch
-  works); run `npx prisma db push` then `npx tsx prisma/seed.ts`.
+  (Node.js app) + Hostinger MySQL, with GitHub Actions auto-deploy over SSH.
+- **MySQL**: the Prisma datasource is `mysql` via a single `DATABASE_URL`
+  (`mysql://user:pass@host:3306/db`). Local dev needs a MySQL URL too (local MySQL/MariaDB or
+  a free cloud MySQL); run `npx prisma db push` then `npx tsx prisma/seed.ts`.
 - **Edge**: `/r/[code]` is cache-friendly (`s-maxage` + `stale-while-revalidate`) and writes
   clicks asynchronously for sub-100ms redirects.
 - **Rate limiting** uses an in-memory token bucket for the demo — back it with Redis/edge KV
