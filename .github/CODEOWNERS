@@ -1,0 +1,77 @@
+# CODEOWNERS — generated from the engineering operating system.
+# Source of truth: docs/employees/README.md#code-ownership-map
+#
+# Owner handles below are GitHub *team* placeholders under the @ai-studio-growth org.
+# Replace them with your real teams/usernames (DevOps owns this file).
+# Last matching pattern wins, so order matters: general rules first, specifics last.
+
+# ── Default ───────────────────────────────────────────────────────────────────
+*                                   @ai-studio-growth/architecture
+
+# ── Operating system (docs) ───────────────────────────────────────────────────
+/docs/                              @ai-studio-growth/documentation
+/docs/standards/                    @ai-studio-growth/architecture @ai-studio-growth/executive
+/docs/architecture/                 @ai-studio-growth/architecture
+/docs/roadmap/                      @ai-studio-growth/product
+/docs/security/                     @ai-studio-growth/security
+/docs/api/                          @ai-studio-growth/backend
+/docs/database/                     @ai-studio-growth/architecture
+/docs/ui/                           @ai-studio-growth/ui-ux
+
+# ── Data layer (schema = shared contract) ─────────────────────────────────────
+/prisma/schema.prisma               @ai-studio-growth/architecture @ai-studio-growth/security @ai-studio-growth/performance
+/prisma/seed.ts                     @ai-studio-growth/qa @ai-studio-growth/backend
+
+# ── Domain — referral engine ──────────────────────────────────────────────────
+/src/lib/referral/engine.ts         @ai-studio-growth/backend @ai-studio-growth/architecture
+/src/lib/referral/codes.ts          @ai-studio-growth/backend @ai-studio-growth/security
+/src/lib/referral/fraud.ts          @ai-studio-growth/ai @ai-studio-growth/backend @ai-studio-growth/security
+/src/lib/referral/rewards.ts        @ai-studio-growth/backend @ai-studio-growth/architecture
+/src/lib/config/campaign-config.ts  @ai-studio-growth/architecture @ai-studio-growth/backend @ai-studio-growth/product
+
+# ── Domain — supporting ───────────────────────────────────────────────────────
+/src/lib/stats.ts                   @ai-studio-growth/backend @ai-studio-growth/performance
+/src/lib/money.ts                   @ai-studio-growth/backend
+/src/lib/notifications.ts           @ai-studio-growth/backend
+/src/lib/audit.ts                   @ai-studio-growth/backend @ai-studio-growth/security
+/src/lib/api-auth.ts                @ai-studio-growth/backend @ai-studio-growth/security @ai-studio-growth/performance
+/src/lib/db.ts                      @ai-studio-growth/backend
+
+# ── Integration — adapters & webhooks ─────────────────────────────────────────
+/src/lib/adapters/                  @ai-studio-growth/integrations @ai-studio-growth/security
+/src/lib/adapters/payouts.ts        @ai-studio-growth/integrations @ai-studio-growth/backend @ai-studio-growth/security
+/src/lib/webhooks.ts                @ai-studio-growth/integrations @ai-studio-growth/backend
+/src/app/api/webhooks/              @ai-studio-growth/integrations @ai-studio-growth/backend
+
+# ── Platform — security & auth (Security has veto) ────────────────────────────
+/src/lib/auth.ts                    @ai-studio-growth/security @ai-studio-growth/backend
+/src/lib/auth-actions.ts            @ai-studio-growth/security @ai-studio-growth/backend
+/src/lib/password.ts                @ai-studio-growth/security
+/src/lib/session.ts                 @ai-studio-growth/security
+/src/middleware.ts                  @ai-studio-growth/security @ai-studio-growth/frontend
+
+# ── Application — public API ──────────────────────────────────────────────────
+/src/app/api/                       @ai-studio-growth/backend @ai-studio-growth/security
+/src/app/r/                         @ai-studio-growth/backend @ai-studio-growth/performance
+/src/app/widget.js/                 @ai-studio-growth/backend
+
+# ── Presentation — route groups ───────────────────────────────────────────────
+/src/app/(platform)/                @ai-studio-growth/frontend @ai-studio-growth/security
+/src/app/(app)/                     @ai-studio-growth/frontend @ai-studio-growth/security
+/src/app/(auth)/                    @ai-studio-growth/frontend @ai-studio-growth/security
+/src/app/(marketing)/               @ai-studio-growth/frontend @ai-studio-growth/product
+/src/app/community/                 @ai-studio-growth/customer-success @ai-studio-growth/frontend
+
+# ── Presentation — design system (tokens & primitives) ────────────────────────
+/src/app/globals.css                @ai-studio-growth/ui-ux
+/tailwind.config.ts                 @ai-studio-growth/ui-ux
+/src/components/ui.tsx              @ai-studio-growth/ui-ux
+/src/components/                    @ai-studio-growth/frontend @ai-studio-growth/ui-ux
+
+# ── Build, config & CI (DevOps) ───────────────────────────────────────────────
+/package.json                       @ai-studio-growth/devops @ai-studio-growth/architecture
+/next.config.mjs                    @ai-studio-growth/devops
+/tsconfig.json                      @ai-studio-growth/devops
+/postcss.config.mjs                 @ai-studio-growth/devops
+/.env.example                       @ai-studio-growth/devops @ai-studio-growth/security
+/.github/                           @ai-studio-growth/devops @ai-studio-growth/executive

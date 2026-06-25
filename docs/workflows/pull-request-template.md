@@ -1,13 +1,14 @@
-<!--
-PR template — aligns with docs/workflows/pull-request-template.md and the Definition of Done
-(docs/standards/definition-of-done.md). Fill every applicable section.
--->
+# Pull Request Template
 
+Owner: DevOps. Copy this into every PR description. (Also suitable as
+`.github/pull_request_template.md`.)
+
+```markdown
 ## What & why
 <One paragraph: what this changes and the problem it solves. Link the spec/issue.>
 
-## Module / area & owners
-<Touched paths + owning department(s) from docs/employees/README.md#code-ownership-map. e.g. notifications-center, payouts, analytics.>
+## Affected modules & owners
+<List touched paths and the owning department(s) from the code-ownership map.>
 
 ## Type
 - [ ] feat  - [ ] fix  - [ ] perf  - [ ] refactor  - [ ] docs  - [ ] test  - [ ] chore  - [ ] sec
@@ -37,18 +38,12 @@ PR template — aligns with docs/workflows/pull-request-template.md and the Defi
 - [ ] Docs/README/API/module map updated in this PR
 - [ ] Backward compatible (or ADR + migration + version bump)
 
-## Build & verification checklist
-- [ ] `npx tsc --noEmit` passes
-- [ ] `npm run build` passes
-- [ ] Prisma schema changes are append-only (no breaking renames) and `prisma validate` passes
-- [ ] New env vars documented in `.env.example`
-- [ ] Verified in the browser (screenshot / notes below)
-
 ## How tested
 <Commands run, scenarios covered, and the result. Paste relevant output.>
 
-## Screenshots / notes
+## Screenshots / API samples
 <For UI or API changes.>
 
 ## Reviewers requested
 <Required owners + mandatory co-reviewers per the code-ownership map.>
+```
