@@ -1,16 +1,17 @@
 // Ai Studio Referrals — universal multi-tenant referral engine.
-// Production runs on PostgreSQL (e.g. Neon). DATABASE_URL is the pooled
-// connection used by the app; DIRECT_URL is a direct connection used for
-// schema migrations. Enums are modeled as strings + app-level validation.
+// Production runs on MySQL (native to Hostinger). DATABASE_URL is the only
+// connection string needed, e.g.:
+//   mysql://USER:PASSWORD@localhost:3306/DBNAME
+// Free-text fields use @db.Text so they aren't truncated to MySQL's default
+// VARCHAR(191). Enums are modeled as strings + app-level validation.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 // ─── Tenancy & access ────────────────────────────────────────────────────────
@@ -59,7 +60,7 @@ model Account {
   id           String    @id @default(cuid())
   email        String    @unique
   name         String
-  passwordHash String
+  passwordHash String    @db.Text
   role         String    @default("advertiser") // super_admin | advertiser | referrer
   status       String    @default("active")     // active | suspended
   orgId        String?
@@ -84,7 +85,7 @@ model Session {
   account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
   expiresAt DateTime
   ipHash    String?
-  userAgent String?
+  userAgent String?  @db.Text
   createdAt DateTime @default(now())
 
   @@index([accountId])
@@ -126,7 +127,7 @@ model Campaign {
   org         Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   name        String
   slug        String
-  description String?
+  description String?  @db.Text
   status      String   @default("active") // draft | active | paused | ended
   startAt     DateTime @default(now())
   endAt       DateTime?
@@ -176,7 +177,7 @@ model EndUser {
   org       Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   email     String
   name      String?
-  avatarUrl String?
+  avatarUrl String?  @db.Text
   phone     String?
   country   String?
   createdAt DateTime @default(now())
@@ -216,7 +217,7 @@ model Notification {
   audience  String   @default("all")   // all | advertisers | referrers
   channel   String   @default("inapp") // inapp | email
   title     String
-  body      String
+  body      String   @db.Text
   status    String   @default("sent")  // draft | sent
   createdAt DateTime @default(now())
 
@@ -249,7 +250,7 @@ model IntegrationProvider {
   slug        String   @unique
   name        String
   category    String   // payouts | messaging | ecommerce | crm | analytics | other
-  description String?
+  description String?  @db.Text
   // JSON array of { key, label, type } describing the config form fields.
   fields      Json?
   enabled     Boolean  @default(true)
@@ -261,7 +262,7 @@ model IntegrationProvider {
 model PlatformSetting {
   id        String   @id @default(cuid())
   key       String   @unique
-  value     String   // stored as text; booleans/numbers parsed by the reader
+  value     String   @db.Text // stored as text; booleans/numbers parsed by the reader
   group     String   @default("general")
   label     String?
   type      String   @default("text") // text | number | boolean
@@ -274,7 +275,7 @@ model WebhookEndpoint {
   id        String   @id @default(cuid())
   orgId     String
   org       Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
-  url       String
+  url       String   @db.Text
   secret    String   // HMAC signing secret (shown once on creation)
   events    String   @default("*") // comma-separated event names, or "*" for all
   status    String   @default("active") // active | disabled
@@ -292,7 +293,7 @@ model WebhookDelivery {
   event      String
   status     String   @default("pending") // pending | success | failed
   statusCode Int?
-  error      String?
+  error      String?  @db.Text
   createdAt  DateTime @default(now())
 
   @@index([endpointId, createdAt])
@@ -305,7 +306,7 @@ model CommunityPost {
   authorRole String   @default("member") // team | advertiser | referrer | member
   category   String   @default("general") // general | announcements | feature-requests | wins
   title      String
-  body       String
+  body       String   @db.Text
   pinned     Boolean  @default(false)
   createdAt  DateTime @default(now())
 
@@ -341,8 +342,8 @@ model Click {
   ipHash     String?  // hashed, never store raw IP
   deviceHash String?  // fingerprint hash for duplicate-device detection
   country    String?
-  userAgent  String?
-  referer    String?
+  userAgent  String?  @db.Text
+  referer    String?  @db.Text
   createdAt  DateTime @default(now())
 
   @@index([referralId])

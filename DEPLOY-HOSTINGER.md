@@ -1,22 +1,25 @@
-# Deploying Ai Studio Referrals to Hostinger (Node.js app) + Neon Postgres
+# Deploying Ai Studio Referrals to Hostinger (Node.js app) + MySQL
 
 This app is a **Next.js 15 server app** (SSR, server actions, middleware, API routes).
-It needs a **Node.js runtime** and a **PostgreSQL** database. On Hostinger Cloud/Business
-plans we run it via the **Node.js app** feature (Phusion Passenger) and use **Neon** for
-Postgres (Hostinger shared plans don't provide Postgres).
+It needs a **Node.js runtime** and a **MySQL** database — both provided natively by
+Hostinger. We run the app via the **Node.js app** feature (Phusion Passenger) and use
+Hostinger's **MySQL** (no external database service needed).
 
 Deploys are driven by **GitHub Actions over SSH** (`.github/workflows/deploy.yml`): it
-pulls `main` on the server, installs deps, pushes the schema to Neon, builds, and restarts.
+pulls `main` on the server, installs deps, pushes the schema to MySQL, builds, and restarts.
 
 ---
 
-## 1. Create the database (Neon)
+## 1. Create the database (Hostinger MySQL)
 
-1. Sign up at https://neon.tech and create a project (pick a region near your Hostinger server).
-2. In the project, open **Connection Details**. Copy two connection strings:
-   - **Pooled** (host contains `-pooler`) → this becomes `DATABASE_URL`.
-   - **Direct** (no `-pooler`) → this becomes `DIRECT_URL`.
-   Make sure both end with `?sslmode=require`.
+1. hPanel → **Databases → MySQL Databases**.
+2. **Create a new database** and a **database user** (note both — they're prefixed, e.g.
+   `u123456789_aistudio` and `u123456789_app`). Set a strong password.
+3. **Add the user to the database** with **All privileges**.
+4. Your connection string is:
+   `mysql://USER:PASSWORD@localhost:3306/DBNAME` → this is `DATABASE_URL`.
+   (Host is `localhost` because the app and DB run on the same Hostinger server. If hPanel
+   shows a specific DB host, use that instead.)
 
 ## 2. Enable SSH on Hostinger
 
@@ -41,8 +44,8 @@ pulls `main` on the server, installs deps, pushes the schema to Neon, builds, an
    git clone https://github.com/Ai-Studio-Growth/ai-studio-referrals.git ai-studio-referrals
    ```
 7. Create the server env file `~/ai-studio-referrals/.env` from
-   [.env.production.example](.env.production.example) with your real Neon URLs,
-   `NEXT_PUBLIC_APP_URL` (your domain) and a strong `APP_SECRET`
+   [.env.production.example](.env.production.example) with your real `DATABASE_URL`
+   (from step 1), `NEXT_PUBLIC_APP_URL` (your domain) and a strong `APP_SECRET`
    (`openssl rand -hex 32`).
 
 ## 4. First build + seed (one-time, over SSH)
@@ -52,7 +55,7 @@ source /home/uXXXX/nodevenv/ai-studio-referrals/20/bin/activate   # your path fr
 cd ~/ai-studio-referrals
 npm ci
 npx prisma generate
-npx prisma db push                 # creates all tables in Neon
+npx prisma db push                 # creates all tables in MySQL
 npx tsx prisma/seed.ts             # OPTIONAL: demo data (skip for a clean prod)
 npm run build
 mkdir -p tmp && touch tmp/restart.txt   # restart Passenger
@@ -83,8 +86,8 @@ top of `.github/workflows/deploy.yml`.
 ---
 
 ## Notes & troubleshooting
-- **DB only**: Neon (Postgres) is the source of truth. The app's `DATABASE_URL` should be the
-  **pooled** URL; migrations/`db push` use `DIRECT_URL`.
+- **DB**: Hostinger MySQL is the source of truth via a single `DATABASE_URL`
+  (`mysql://user:pass@localhost:3306/dbname`).
 - **Restart**: Passenger reloads when `tmp/restart.txt` is touched (the workflow does this).
 - **Build memory**: `next build` needs ~1 GB RAM. If the build is killed on a small plan,
   build locally / in CI and rsync the `.next` + `node_modules` instead (ask and I'll switch

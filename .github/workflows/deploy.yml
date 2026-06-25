@@ -38,7 +38,7 @@ jobs:
             echo "→ Installing deps"
             npm ci
 
-            echo "→ Prisma generate + push schema to Neon"
+            echo "→ Prisma generate + push schema to MySQL"
             npx prisma generate
             npx prisma db push --skip-generate
 
