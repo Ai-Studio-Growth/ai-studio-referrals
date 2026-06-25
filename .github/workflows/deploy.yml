@@ -1,0 +1,50 @@
+name: Deploy (Hostinger)
+
+# Manual for now — run from the Actions tab once the repo secrets below are set.
+# To deploy automatically on every merge to main, uncomment the `push` trigger.
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: SSH build & restart
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOSTINGER_SSH_HOST }}
+          port: ${{ secrets.HOSTINGER_SSH_PORT }}
+          username: ${{ secrets.HOSTINGER_SSH_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -e
+            # Activate the Node environment hPanel created for the app
+            # (HOSTINGER_NODEVENV e.g. /home/uXXXX/nodevenv/ai-studio-referrals/20)
+            source "${{ secrets.HOSTINGER_NODEVENV }}/bin/activate"
+            cd "${{ secrets.HOSTINGER_APP_DIR }}"
+
+            echo "→ Pulling latest main"
+            git fetch --depth=1 origin main
+            git reset --hard origin/main
+
+            echo "→ Installing deps"
+            npm ci
+
+            echo "→ Prisma generate + push schema to Neon"
+            npx prisma generate
+            npx prisma db push --skip-generate
+
+            echo "→ Building"
+            npm run build
+
+            echo "→ Restarting Passenger"
+            mkdir -p tmp && touch tmp/restart.txt
+            echo "✓ Deployed"

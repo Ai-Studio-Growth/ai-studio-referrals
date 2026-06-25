@@ -1,16 +1,16 @@
-// ReferLift — universal multi-tenant referral engine
-// Local dev uses SQLite for zero-config setup. For production, switch the
-// provider to "postgresql" and point DATABASE_URL at Postgres — the schema is
-// written to be portable (enums are modeled as strings + app-level validation
-// so the same schema runs on either engine).
+// Ai Studio Referrals — universal multi-tenant referral engine.
+// Production runs on PostgreSQL (e.g. Neon). DATABASE_URL is the pooled
+// connection used by the app; DIRECT_URL is a direct connection used for
+// schema migrations. Enums are modeled as strings + app-level validation.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ─── Tenancy & access ────────────────────────────────────────────────────────

@@ -15,7 +15,10 @@ jobs:
     name: Typecheck & build
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: "file:./dev.db"
+      # Dummy Postgres URL — CI only generates the client, validates the schema,
+      # type-checks and builds (dynamic pages don't query the DB at build time).
+      DATABASE_URL: "postgresql://user:pass@localhost:5432/ci?schema=public"
+      DIRECT_URL: "postgresql://user:pass@localhost:5432/ci?schema=public"
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
       APP_SECRET: "ci-secret"
     steps:
