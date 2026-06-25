@@ -10,6 +10,7 @@ the Architecture Council.
 | ADR | Title | Status |
 | --- | --- | --- |
 | [0001](0001-engineering-operating-system.md) | Establish the engineering operating system | Accepted |
+| [0002](0002-github-org-umbrella.md) | AI Studio Growth is a GitHub org, one repo per product | Accepted |
 
 ## Process
 

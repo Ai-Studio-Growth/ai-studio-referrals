@@ -44,8 +44,9 @@ through a defined [development workflow](../workflows/development-workflow.md) a
 
 | | |
 | --- | --- |
-| **Product** | Ai Studio Referrals |
+| **Company / GitHub org** | AI Studio Growth (`ai-studio-growth`) — see [github-org.md](github-org.md) |
+| **Product** | Ai Studio Referrals (repo `ai-studio-referrals`) |
 | **Stack** | Next.js 15 (App Router), TypeScript, Tailwind, Prisma, SQLite→Postgres |
 | **Architecture** | Multi-tenant SaaS, config-driven engine, swappable adapters |
-| **Repository** | Single monorepo; trunk = `main`, integration = `develop` |
+| **Repository model** | One repo per product (not per feature); trunk = `main`, integration = `develop`. See [ADR-0002](../architecture/adr/0002-github-org-umbrella.md) |
 | **Current version** | 0.1.0 (see [roadmap](../roadmap/version-roadmap.md)) |
