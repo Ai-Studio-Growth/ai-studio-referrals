@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { LogoMark } from './logo';
 import { ThemeToggle } from './theme-toggle';
-import { LayoutGrid, Building2, CreditCard, Blocks, Bell, Users2, Gift, Settings, LogOut, Menu, X, ShieldCheck } from 'lucide-react';
+import { LayoutGrid, Building2, CreditCard, Blocks, Bell, Users2, Gift, Settings, ScrollText, LogOut, Menu, X, ShieldCheck } from 'lucide-react';
 
 const NAV = [
   { href: '/platform', label: 'Overview', icon: LayoutGrid },
@@ -15,6 +15,7 @@ const NAV = [
   { href: '/platform/subscriptions', label: 'Subscriptions', icon: CreditCard },
   { href: '/platform/integrations', label: 'Integrations', icon: Blocks },
   { href: '/platform/notifications', label: 'Notifications', icon: Bell },
+  { href: '/platform/audit', label: 'Audit log', icon: ScrollText },
   { href: '/platform/users', label: 'Users', icon: Users2 },
   { href: '/platform/settings', label: 'Settings', icon: Settings },
 ];
