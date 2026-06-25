@@ -13,6 +13,13 @@ import {
 } from 'lucide-react';
 import { LogoMark } from '@/components/logo';
 import { Reveal, HeroPreview, FunnelMock, RewardMock } from '@/components/landing';
+import {
+  TelegramIcon,
+  FacebookIcon,
+  YouTubeIcon,
+  InstagramIcon,
+  LinkedInIcon,
+} from '@/components/social-icons';
 
 // Render dynamically — Hostinger's managed runtime mis-serves prerendered static pages (503).
 export const dynamic = 'force-dynamic';
@@ -61,8 +68,8 @@ export default function Home() {
       {/* ─── Hero ─── */}
       <section className="relative pt-10 sm:pt-16">
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-grid" />
-        <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-brand/20 blur-[120px]" />
-        <div aria-hidden className="pointer-events-none absolute right-10 top-40 -z-10 h-72 w-72 rounded-full bg-accent/20 blur-[100px]" />
+        <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-brand/20 blur-[60px] sm:blur-[120px]" />
+        <div aria-hidden className="pointer-events-none absolute right-10 top-40 -z-10 hidden h-72 w-72 rounded-full bg-accent/20 blur-[100px] sm:block" />
 
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
@@ -232,32 +239,68 @@ export default function Home() {
       </Reveal>
 
       {/* ─── Footer ─── */}
-      <footer className="border-t border-border pt-10">
-        <div className="flex flex-col items-start justify-between gap-8 sm:flex-row">
+      <footer className="border-t border-border pt-12">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
+          {/* Brand + social */}
           <div className="max-w-xs">
             <span className="flex items-center gap-2.5">
-              <LogoMark className="h-9 w-9" />
+              <LogoMark className="h-10 w-10" />
               <span className="flex flex-col leading-none">
                 <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand">Ai Studio</span>
                 <span className="text-base font-extrabold uppercase tracking-tight">
-                  Referrals<span className="text-accent">.</span>
+                  Craft<span className="text-accent">.</span>
                 </span>
               </span>
             </span>
-            <p className="mt-4 text-sm text-muted">Referral marketing made effortless — for any business.</p>
+            <p className="mt-4 text-sm leading-relaxed text-muted">
+              Create a FREE account today to get access to everything you need to succeed with referral marketing.
+            </p>
+            <div className="mt-5 flex items-center gap-3">
+              {[
+                { Icon: TelegramIcon, label: 'Telegram', href: 'https://t.me' },
+                { Icon: FacebookIcon, label: 'Facebook', href: 'https://facebook.com' },
+                { Icon: YouTubeIcon, label: 'YouTube', href: 'https://youtube.com' },
+                { Icon: InstagramIcon, label: 'Instagram', href: 'https://instagram.com' },
+                { Icon: LinkedInIcon, label: 'LinkedIn', href: 'https://linkedin.com' },
+              ].map(({ Icon, label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="text-muted transition-colors hover:text-brand"
+                >
+                  <Icon className="h-[18px] w-[18px]" />
+                </a>
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-x-12 gap-y-2 text-sm sm:grid-cols-3">
-            <FooterLink href="/admin" label="Overview" />
-            <FooterLink href="/dashboard" label="Share & earn" />
-            <FooterLink href="/leaderboard" label="Leaderboard" />
-            <FooterLink href="/admin/campaigns/new" label="New campaign" />
-            <FooterLink href="/settings" label="Settings" />
-            <FooterLink href="/widget.js" label="Embed widget" />
+
+          {/* Links */}
+          <div>
+            <h3 className="text-sm font-semibold">Links</h3>
+            <div className="mt-4 flex flex-col gap-3 text-sm">
+              <FooterLink href="/" label="Home" />
+              <FooterLink href="/#pricing" label="Pricing" />
+              <FooterLink href="/docs" label="Knowledge-base" />
+              <FooterLink href="/support" label="Support Desk" />
+            </div>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="text-sm font-semibold">Legal</h3>
+            <div className="mt-4 flex flex-col gap-3 text-sm">
+              <FooterLink href="/legal/privacy" label="Privacy Policy" />
+              <FooterLink href="/legal/terms" label="Terms of Service" />
+              <FooterLink href="/legal/gdpr" label="GDPR Policy" />
+              <FooterLink href="/legal/refund" label="Refund Policy" />
+            </div>
           </div>
         </div>
-        <div className="mt-10 flex items-center gap-2 border-t border-border pt-6 text-xs text-muted">
-          <Check className="h-3.5 w-3.5 text-success" />© {new Date().getFullYear()} Ai Studio Referrals. Built as a
-          production-grade reference implementation.
+        <div className="mt-12 border-t border-border pt-6 text-xs text-muted">
+          © {new Date().getFullYear()} <span className="text-brand">Ai Studio Craft</span> All Rights Reserved
         </div>
       </footer>
     </div>

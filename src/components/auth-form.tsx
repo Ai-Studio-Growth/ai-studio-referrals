@@ -4,9 +4,10 @@ import { useActionState, useState } from 'react';
 import Link from 'next/link';
 import { Eye, EyeOff, Loader2, Mail, Lock, User, Building2, AlertCircle, ArrowRight } from 'lucide-react';
 import { loginAction, signupAction, type AuthState } from '@/lib/auth-actions';
+import { SocialLoginButtons } from '@/components/social-login-buttons';
 
 const field =
-  'w-full rounded-xl border bg-surface-2/60 pl-10 pr-10 py-2.5 text-sm outline-none transition-colors focus:border-brand/60 focus:ring-2 focus:ring-brand/30';
+  'w-full rounded-xl border bg-surface-2/60 pl-10 pr-10 py-3 text-sm outline-none transition-colors focus:border-brand/60 focus:ring-2 focus:ring-brand/30';
 const labelCls = 'mb-1.5 block text-xs font-medium text-muted';
 
 function strength(pw: string): { score: number; label: string } {
@@ -29,7 +30,9 @@ export function AuthForm({ mode, next }: { mode: 'login' | 'signup'; next?: stri
   const fe = state.fieldErrors ?? {};
 
   return (
-    <form action={formAction} className="space-y-4">
+    <div className="space-y-5">
+      <SocialLoginButtons mode={mode} />
+      <form action={formAction} className="space-y-4">
       {state.error && (
         <div className="flex items-start gap-2 rounded-xl border border-danger/30 bg-danger/10 px-3 py-2.5 text-sm text-danger">
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -152,6 +155,7 @@ export function AuthForm({ mode, next }: { mode: 'login' | 'signup'; next?: stri
           </>
         )}
       </p>
-    </form>
+      </form>
+    </div>
   );
 }
