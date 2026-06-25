@@ -238,9 +238,11 @@ in code. Unconfigured adapters fall back to safe **console stubs** so the app al
 
 ## 🚀 Production notes
 
-- **Postgres**: set `provider = "postgresql"` in `prisma/schema.prisma`, point
-  `DATABASE_URL` at Postgres, then `npx prisma migrate deploy`. The schema is written to be
-  portable (string-encoded enums + app-level validation).
+- **Deploy:** see **[DEPLOY-HOSTINGER.md](DEPLOY-HOSTINGER.md)** — step-by-step for Hostinger
+  (Node.js app) + Neon Postgres, with GitHub Actions auto-deploy over SSH.
+- **Postgres**: the Prisma datasource is `postgresql` (with `DATABASE_URL` pooled +
+  `DIRECT_URL` direct for migrations). Local dev needs a Postgres URL too (a free Neon branch
+  works); run `npx prisma db push` then `npx tsx prisma/seed.ts`.
 - **Edge**: `/r/[code]` is cache-friendly (`s-maxage` + `stale-while-revalidate`) and writes
   clicks asynchronously for sub-100ms redirects.
 - **Rate limiting** uses an in-memory token bucket for the demo — back it with Redis/edge KV
