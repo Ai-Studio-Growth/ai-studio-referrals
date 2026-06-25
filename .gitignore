@@ -21,5 +21,9 @@ Thumbs.db
 *.tsbuildinfo
 next-env.d.ts
 
-# local tooling (machine-specific absolute paths)
-.claude/
+# local tooling — share team config, ignore machine-specific/secret bits
+.claude/*
+!.claude/agents/
+!.claude/hooks/
+!.claude/settings.json
+.claude/settings.local.json
