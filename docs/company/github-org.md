@@ -77,9 +77,11 @@ git remote set-url origin https://github.com/ai-studio-growth/ai-studio-referral
   gh api -X PUT orgs/ai-studio-growth/teams/backend/repos/ai-studio-growth/ai-studio-referrals \
     -f permission=push
   ```
-- Enable branch protection on `main` and `develop` (require PR, CODEOWNERS review, green CI) per
-  the [branching strategy](../standards/branching-strategy.md) and
-  [release process](../standards/release-process.md).
+- **Branch protection on `main`** (require PR, CODEOWNERS review, green `Typecheck & build`)
+  per the [branching strategy](../standards/branching-strategy.md) requires a **paid plan**
+  (GitHub Team) for a *private* repo — it is **not available on the Free plan**. Until then,
+  CODEOWNERS is **advisory**: it auto-requests the right teams on every PR but does not block
+  merges. Enforce it by upgrading to GitHub Team, then applying protection to `main`.
 
 ### 5. (Optional) Org-level `.github` repo
 If a second product appears, create `ai-studio-growth/.github` to share org-wide community

@@ -11,7 +11,7 @@ owner's approval.
 | [Database Standards](database-standards.md) | Architecture (Data) | Schema, migrations, tenancy, indexing |
 | [API Standards](api-standards.md) | Backend | REST conventions, versioning, errors |
 | [Git Standards](git-standards.md) | DevOps | Commits, hygiene, signing |
-| [Branching Strategy](branching-strategy.md) | DevOps | main/develop/release/hotfix/feature |
+| [Branching Strategy](branching-strategy.md) | DevOps | Trunk-based on main; feature/fix/hotfix/release |
 | [Security Standards](security-standards.md) | Security | Authn/z, secrets, RBAC, audit |
 | [Performance Standards](performance-standards.md) | Performance | Budgets, caching, query rules |
 | [Testing Standards](testing-standards.md) | QA | Test pyramid, coverage, gates |

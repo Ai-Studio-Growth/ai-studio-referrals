@@ -1,7 +1,8 @@
 # Release Process
 
 Owner: VP Engineering. Approved by the **Release Council** (VP Eng + QA + DevOps + Docs).
-See also [releases/](../releases/README.md) and [versioning](../releases/versioning.md).
+Trunk-based: we release by **tagging `main`**. See also [releases/](../releases/README.md) and
+[versioning](../releases/versioning.md).
 
 ## Versioning
 
@@ -10,33 +11,31 @@ See also [releases/](../releases/README.md) and [versioning](../releases/version
   - MINOR: backward-compatible feature.
   - PATCH: backward-compatible fix.
 
-## Release train
+## Release flow
 
 ```
-develop ──► release/X.Y.Z ──► (stabilize) ──► merge to main ──► tag vX.Y.Z ──► deploy
-                                                     └──► back-merge to develop
+feature/* ─► PR ─► main ─► (optional release/X.Y.Z for stabilization) ─► tag vX.Y.Z ─► deploy
 ```
 
 ## Steps
 
-1. **Cut.** VP Eng creates `release/X.Y.Z` from `develop`. Feature freeze begins.
-2. **Stabilize.** Only fixes, docs, version bump on the release branch.
-3. **Gate (Release Council):**
-   - DevOps: green build + lint + tests in CI.
+1. **Stabilize.** `main` is always releasable. If last-mile hardening is needed without
+   freezing the trunk, cut an optional `release/X.Y.Z` from `main` for fixes/docs/version bump.
+2. **Gate (Release Council):**
+   - DevOps: green CI (`Typecheck & build`) + lint + tests.
    - QA: acceptance criteria covered, no open Sev-1/Sev-2.
    - Security: no unresolved security findings.
    - Docs: changelog + docs updated.
-4. **Bump & changelog.** Update `package.json` version and
+3. **Bump & changelog.** Update `package.json` version and
    [`CHANGELOG`](../releases/changelog.md).
-5. **Merge & tag.** Merge to `main`, tag `vX.Y.Z` (annotated).
-6. **Deploy.** DevOps runs `prisma migrate deploy` then ships. Verify health.
-7. **Back-merge.** Merge `main` back into `develop`.
-8. **Post-release.** Monitor; any urgent issue → `hotfix/*`.
+4. **Tag.** Tag `vX.Y.Z` (annotated) on `main` (after merging the `release/*` branch, if used).
+5. **Deploy.** DevOps runs `prisma migrate deploy` then ships. Verify health.
+6. **Post-release.** Monitor; any urgent issue → `hotfix/*` (PR straight back to `main`).
 
 ## Hotfixes
 
-Branch `hotfix/X.Y.(Z+1)` from `main`, fix, gate (abbreviated), tag, deploy, back-merge to
-`develop` same day.
+Branch `hotfix/X.Y.(Z+1)` from `main`, fix, gate (abbreviated), open an expedited PR to `main`,
+tag, and deploy.
 
 ## Rollback
 

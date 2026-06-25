@@ -15,7 +15,7 @@ Owner: Executive Office. How work actually moves through AI Studio Growth.
 ```
 Backlog ─► Sprint planning ─► feature/* branch ─► 11-stage dev workflow ─► PR (reviews)
    ▲                                                                          │
-   └──────────────────── done ◄── release train ◄── merge to develop ◄────────┘
+   └──────────────────── done ◄── release train ◄── merge to main ◄──────────┘
 ```
 
 Start with the [AI Workforce Rules](ai-workforce-rules.md) — they govern everything else.

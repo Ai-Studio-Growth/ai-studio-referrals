@@ -1,23 +1,26 @@
 # Branching Strategy
 
-Owner: DevOps. A trunk-based-with-release-branches model.
+Owner: DevOps. **Trunk-based development on `main`.** `main` is the single long-lived branch;
+everything else is short-lived and merges back to `main` via PR.
 
-## Long-lived branches
+## Long-lived branch
 
 | Branch | Purpose | Protection |
 | --- | --- | --- |
-| `main` | Production. Always releasable. Tagged per release. | Protected; PR + green CI + Release Council |
-| `develop` | Integration. Next release accumulates here. | Protected; PR + green CI + owner review |
+| `main` | The trunk. Always releasable. Tagged per release. | PR + green CI + CODEOWNERS review (advisory on the Free plan; see [github-org.md](../company/github-org.md)) |
+
+> There is **no `develop` branch** — we ship from `main`. A `release/*` branch is cut from
+> `main` only when a release needs stabilization while `main` keeps moving.
 
 ## Short-lived branches
 
 | Pattern | From → into | Used by |
 | --- | --- | --- |
-| `feature/<area>-<slug>` | `develop` → `develop` | Feature work (e.g. `feature/referral-tiers`) |
-| `fix/<area>-<slug>` | `develop` → `develop` | Non-urgent bug fixes |
-| `release/<version>` | `develop` → `main` (+ back-merge to `develop`) | Release stabilization |
-| `hotfix/<version>` | `main` → `main` (+ back-merge to `develop`) | Urgent production fixes |
-| `arch/*`, `sec/*`, `ops/*`, `perf/*`, `qa/*`, `docs/*` | `develop` → `develop` | Dept-specific work (see [employee directory](../employees/README.md)) |
+| `feature/<area>-<slug>` | `main` → `main` | Feature work (e.g. `feature/referral-tiers`) |
+| `fix/<area>-<slug>` | `main` → `main` | Non-urgent bug fixes |
+| `hotfix/<version>` | `main` → `main` | Urgent production fixes |
+| `release/<version>` | `main` → `main` (tag) | Optional release stabilization |
+| `arch/*`, `sec/*`, `ops/*`, `perf/*`, `qa/*`, `docs/*` | `main` → `main` | Dept-specific work (see [employee directory](../employees/README.md)) |
 
 > The branch you start on dictates ownership. Branch prefixes map to departments in the
 > employee directory — use your assigned prefix.
@@ -26,17 +29,17 @@ Owner: DevOps. A trunk-based-with-release-branches model.
 
 ```
 feature/* ─┐
-fix/*     ─┼─► develop ─► release/x.y.z ─► main ─► tag vX.Y.Z
-arch/* …  ─┘                   │                      │
-                               └──── back-merge ──────┴──► develop
-hotfix/* ─────────────────────────────► main ─► tag, back-merge ► develop
+fix/*      ─┼─► PR ─► main ─► tag vX.Y.Z ─► deploy
+arch/* …   ─┘                 ▲
+hotfix/*  ──────► PR ─────────┘
+release/* (optional, cut from main for stabilization) ─► main ─► tag
 ```
 
 ## Rules
 
-- Branch from the correct base (`develop` for features, `main` for hotfixes).
-- Keep branches short-lived; rebase on `develop` frequently to reduce drift.
-- Delete branches after merge.
-- A release branch is feature-frozen — only fixes, docs, and version bumps.
-- Hotfixes are the only path to `main` outside a release; they must be back-merged to
-  `develop` the same day.
+- Branch from the latest `main`; rebase on `main` frequently to reduce drift.
+- Keep branches short-lived; **one PR = one logical change**. Delete branches after merge.
+- Everything reaches `main` through a PR — no direct commits to `main`.
+- A `release/*` branch (when used) is feature-frozen: only fixes, docs, and version bumps,
+  then tag on `main`.
+- Hotfixes branch from `main` and merge straight back via an expedited PR.

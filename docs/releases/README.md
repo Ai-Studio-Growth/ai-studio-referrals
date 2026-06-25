@@ -10,7 +10,7 @@ Owner: VP Engineering. How we version, tag, and record what shipped.
 ## At a glance
 
 ```
-develop ─► release/X.Y.Z ─► main ─► tag vX.Y.Z ─► deploy ─► back-merge to develop
+feature/* ─► PR ─► main ─► (optional release/X.Y.Z) ─► tag vX.Y.Z ─► deploy
 ```
 
 A release is approved by the **Release Council** (VP Eng + QA + DevOps + Docs) only when the

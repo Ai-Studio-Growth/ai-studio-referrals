@@ -48,5 +48,5 @@ through a defined [development workflow](../workflows/development-workflow.md) a
 | **Product** | Ai Studio Referrals (repo `ai-studio-referrals`) |
 | **Stack** | Next.js 15 (App Router), TypeScript, Tailwind, Prisma, SQLite→Postgres |
 | **Architecture** | Multi-tenant SaaS, config-driven engine, swappable adapters |
-| **Repository model** | One repo per product (not per feature); trunk = `main`, integration = `develop`. See [ADR-0002](../architecture/adr/0002-github-org-umbrella.md) |
+| **Repository model** | One repo per product (not per feature); trunk-based on `main` (no `develop`). See [ADR-0002](../architecture/adr/0002-github-org-umbrella.md) |
 | **Current version** | 0.1.0 (see [roadmap](../roadmap/version-roadmap.md)) |

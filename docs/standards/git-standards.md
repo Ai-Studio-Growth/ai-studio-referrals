@@ -29,14 +29,13 @@ Owner: DevOps. See also the [branching strategy](branching-strategy.md) and
 
 ## Branches & PRs
 
-- Branch from `develop`; name per the [branching strategy](branching-strategy.md)
+- Branch from the latest `main`; name per the [branching strategy](branching-strategy.md)
   (`feature/…`, `fix/…`, `hotfix/…`, `release/…`).
 - One PR = one reviewable unit. Keep diffs focused; unrelated cleanups go in their own PR.
-- Never force-push shared branches (`main`, `develop`, `release/*`). Rebase your own feature
-  branch only.
+- Never force-push `main` (or any shared `release/*`). Rebase your own feature branch only.
 
 ## What not to do
 
-- No direct commits to `main` or `develop` — always via PR.
+- No direct commits to `main` — always via PR.
 - No history rewrites on shared branches.
 - No committing another team's module without their review on the PR.

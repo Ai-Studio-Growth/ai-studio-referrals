@@ -5,14 +5,15 @@ Owner: VP Engineering + Product. Mechanics live in the
 
 ## Cadence
 
-- **Release train every 2 weeks** off `develop` via a `release/X.Y.Z` branch.
+- **Release train every 2 weeks** — tag `vX.Y.Z` on `main` (optionally via a short-lived
+  `release/X.Y.Z` stabilization branch).
 - MINOR per train when there's shippable value; PATCH on demand for fixes; MAJOR only with an
   ADR-backed breaking change.
 - Hotfixes ship out-of-band from `main`.
 
 ## Principles
 
-- **Always releasable `main`.** `develop` integrates; `main` is production-tagged.
+- **Always releasable `main`.** The trunk is production-tagged; feature branches are short-lived.
 - **Feature flags over long branches.** Ship dark, enable progressively.
 - **Backward compatible by default.** Integrators are never surprised.
 - **Gated, not gatekept.** Automated gates (CI, tests) plus a lightweight Release Council
