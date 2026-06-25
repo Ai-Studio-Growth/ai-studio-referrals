@@ -15,6 +15,7 @@ import {
   Settings,
   LifeBuoy,
   MessageCircle,
+  Bell as BellIcon,
   Search,
   PanelLeft,
   Menu,
@@ -23,6 +24,8 @@ import {
   X,
   CornerDownLeft,
 } from 'lucide-react';
+import { NotificationBell } from './notification-bell';
+import type { NotificationItem } from '@/lib/notifications';
 
 type NavItem = { href: string; label: string; icon: typeof LayoutGrid };
 type Role = 'super_admin' | 'advertiser' | 'referrer';
@@ -36,6 +39,7 @@ function navForRole(role: Role): { primary: { group: string; items: NavItem[] }[
           items: [
             { href: '/dashboard', label: 'My performance', icon: Gift },
             { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
+            { href: '/notifications', label: 'Notifications', icon: BellIcon },
           ],
         },
       ],
@@ -52,6 +56,7 @@ function navForRole(role: Role): { primary: { group: string; items: NavItem[] }[
           { href: '/admin/referrers', label: 'Referrers', icon: Gift },
           { href: '/admin#fraud', label: 'Fraud review', icon: ShieldAlert },
           { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
+          { href: '/notifications', label: 'Notifications', icon: BellIcon },
         ],
       },
     ],
@@ -69,6 +74,7 @@ const TITLES: Record<string, string> = {
   '/dashboard': 'My performance',
   '/leaderboard': 'Leaderboard',
   '/settings': 'Settings',
+  '/notifications': 'Notifications',
 };
 
 export function AppShell({
@@ -76,12 +82,16 @@ export function AppShell({
   org,
   role,
   logoutAction,
+  notifications,
+  unreadCount,
   children,
 }: {
   user: { name: string; email: string; avatarUrl?: string | null };
   org: { name: string };
   role: Role;
   logoutAction: () => void | Promise<void>;
+  notifications: NotificationItem[];
+  unreadCount: number;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -283,6 +293,7 @@ export function AppShell({
                 <Search className="h-3.5 w-3.5" /> Search
                 <kbd className="rounded border border-border bg-surface px-1 text-[10px]">⌘K</kbd>
               </button>
+              <NotificationBell items={notifications} unreadCount={unreadCount} />
               <ThemeToggle />
               {showCreate && (
                 <Link href="/admin/campaigns/new" className="btn-brand !py-2">

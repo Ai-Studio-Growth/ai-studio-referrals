@@ -68,7 +68,8 @@ model Account {
   lastLoginAt  DateTime?
   createdAt    DateTime  @default(now())
 
-  sessions Session[]
+  sessions  Session[]
+  receipts  NotificationReceipt[]
 
   @@index([orgId])
 }
@@ -218,8 +219,23 @@ model Notification {
   status    String   @default("sent")  // draft | sent
   createdAt DateTime @default(now())
 
+  receipts  NotificationReceipt[]
+
   @@index([orgId])
   @@index([createdAt])
+}
+
+model NotificationReceipt {
+  id             String       @id @default(cuid())
+  accountId      String
+  account        Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  notificationId String
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  readAt         DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@unique([accountId, notificationId])
+  @@index([accountId])
 }
 
 // ─── No-code platform extensibility ──────────────────────────────────────────
