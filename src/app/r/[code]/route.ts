@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { recordClick } from '@/lib/referral/engine';
 import { landingLink, normalizeCode } from '@/lib/referral/codes';
+import { isReferralExpired } from '@/lib/referral/expiry';
 
 /**
  * Sub-100ms referral redirect.
@@ -16,13 +17,20 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ code: strin
   // Resolve the destination first (single indexed lookup on Referral.code).
   const referral = await db.referral.findUnique({
     where: { code },
-    select: { id: true, campaign: { select: { attributionWindowDays: true } } },
+    select: {
+      id: true,
+      createdAt: true,
+      campaign: { select: { attributionWindowDays: true, eligibility: true } },
+    },
   });
 
-  const destination = referral ? landingLink(code) : '/';
+  // Config-driven expiry: an expired code still lands gracefully (with a flag the
+  // join page can surface) but is not tracked and earns no attribution.
+  const expired = referral ? isReferralExpired(referral.createdAt, referral.campaign.eligibility) : false;
+  const destination = referral ? (expired ? `${landingLink(code)}?expired=1` : landingLink(code)) : '/';
   const res = NextResponse.redirect(new URL(destination, req.url), 302);
 
-  if (referral) {
+  if (referral && !expired) {
     const windowDays = referral.campaign.attributionWindowDays;
     res.cookies.set('rl_ref', code, {
       maxAge: windowDays * 24 * 60 * 60,
