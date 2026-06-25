@@ -19,6 +19,7 @@ import {
   ScrollText,
   Webhook,
   Wallet,
+  BarChart3,
   Search,
   PanelLeft,
   Menu,
@@ -55,6 +56,7 @@ function navForRole(role: Role): { primary: { group: string; items: NavItem[] }[
         group: 'Workspace',
         items: [
           { href: '/admin', label: 'Overview', icon: LayoutGrid },
+          { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
           { href: '/admin#campaigns', label: 'Campaigns', icon: Megaphone },
           { href: '/admin/referrers', label: 'Referrers', icon: Gift },
           { href: '/admin/payouts', label: 'Payouts', icon: Wallet },
@@ -75,6 +77,7 @@ function navForRole(role: Role): { primary: { group: string; items: NavItem[] }[
 
 const TITLES: Record<string, string> = {
   '/admin': 'Overview',
+  '/admin/analytics': 'Analytics',
   '/admin/campaigns/new': 'New campaign',
   '/admin/referrers': 'Referrers',
   '/admin/audit': 'Audit log',
