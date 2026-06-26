@@ -188,6 +188,14 @@ export async function loginAction(_prev: AuthState, formData: FormData): Promise
 
   resetAttempts(key);
 
+  // Escape hatch: skip the login second factor (e.g. for demo accounts) when
+  // DISABLE_LOGIN_OTP is set. Signup OTP is unaffected.
+  if (process.env.DISABLE_LOGIN_OTP === 'true') {
+    await db.account.update({ where: { id: account.id }, data: { lastLoginAt: new Date() } });
+    await createSession(account.id);
+    redirect(next.startsWith('/') ? next : homeForRole(account.role));
+  }
+
   // Password is correct — require a second factor before issuing the session.
   await createChallenge({ identifier: email, purpose: 'login', email, phone: account.phone });
   await setPending({ email, purpose: 'login', next: next.startsWith('/') ? next : undefined });
