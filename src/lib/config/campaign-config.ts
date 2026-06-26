@@ -68,6 +68,9 @@ export const eligibilitySchema = z.object({
   allowedCountries: z.array(z.string()).optional(), // ISO codes; empty = all
   minOrderCents: z.number().nonnegative().optional(),
   blockDisposableEmail: z.boolean().default(true),
+  // Referral codes (and the QR / short links that encode them) expire this many
+  // days after creation. Omit or 0 = codes never expire. Enforced by the engine.
+  referralExpiryDays: z.number().int().positive().optional(),
 });
 export type Eligibility = z.infer<typeof eligibilitySchema>;
 

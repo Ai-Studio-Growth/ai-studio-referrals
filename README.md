@@ -114,7 +114,9 @@ campaign carries its own:
   with **milestone/tier** bonuses and **double-sided** (referrer + referee) rewards.
 - **Attribution** — `first_touch` / `last_touch` with a configurable window (days).
 - **Caps & eligibility** — max rewards/user, total budget, new-users-only, allowed
-  countries, disposable-email blocking, **reward hold period**.
+  countries, disposable-email blocking, **reward hold period**, and optional
+  **referral code expiry** (`referralExpiryDays` — codes & their QR/links stop tracking and
+  earning after N days; omit = never).
 - **A/B testing** — variants share an `abTestKey` and split traffic by `abWeight`.
 
 The engine ([`src/lib/referral/engine.ts`](src/lib/referral/engine.ts)) reads all of this

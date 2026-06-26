@@ -2,6 +2,7 @@ import { db } from '@/lib/db';
 import { generateCode, hashValue } from './codes';
 import { resolveRewards } from './rewards';
 import { evaluateConversion, worstSeverity, looksLikeValidEmail } from './fraud';
+import { isReferralExpired } from './expiry';
 import { emit } from '@/lib/adapters/messaging';
 import { dispatchOrgWebhooks } from '@/lib/webhooks';
 import type { Prisma } from '@prisma/client';
@@ -144,6 +145,15 @@ export async function recordConversion(args: {
     explicitCode: args.code ?? null,
   });
   if (!referral) return { ok: false, reason: 'no_attribution' };
+
+  // Config-driven referral expiry: an expired code can no longer earn a reward.
+  if (isReferralExpired(referral.createdAt, campaign.eligibility)) {
+    await audit(campaign.orgId, args.refereeEmail ?? 'system', 'conversion.rejected_expired', referral.id, {
+      code: referral.code,
+      event: args.event,
+    });
+    return { ok: false, reason: 'referral_expired' };
+  }
 
   const referrer = await db.endUser.findUniqueOrThrow({ where: { id: referral.referrerId } });
 
