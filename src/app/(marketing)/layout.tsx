@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { CookieConsent } from '@/components/cookie-consent';
+import { WhatsAppButton } from '@/components/whatsapp-button';
 
 /** Public marketing chrome — a floating glass pill nav over a soft mesh. */
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
@@ -52,6 +53,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
 
       <main className="mx-auto w-full max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">{children}</main>
       <CookieConsent />
+      <WhatsAppButton />
     </div>
   );
 }
