@@ -63,6 +63,7 @@ model Account {
   id           String    @id @default(cuid())
   email        String    @unique
   name         String
+  phone        String?                           // E.164, e.g. +14155552671 — used for WhatsApp OTP
   passwordHash String    @db.Text
   role         String    @default("advertiser") // super_admin | advertiser | referrer
   status       String    @default("active")     // active | suspended
@@ -92,6 +93,23 @@ model Session {
   createdAt DateTime @default(now())
 
   @@index([accountId])
+}
+
+// A short-lived OTP challenge for two-step signup/login. We persist only
+// sha256(code) (never the plaintext) and, for signup, the pending account
+// payload so no half-created Account exists until the code is verified.
+model VerificationCode {
+  id         String   @id @default(cuid())
+  identifier String   // the email the challenge is keyed to (lowercased)
+  codeHash   String   // sha256 of the 6-digit code
+  channel    String   @default("email") // email | whatsapp | email+whatsapp
+  purpose    String   // signup | login
+  payload    Json?    // pending signup data (for purpose=signup)
+  attempts   Int      @default(0)
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  @@index([identifier])
 }
 
 // A person who administers an org (admin/manager/viewer).

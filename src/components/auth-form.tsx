@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from 'react';
 import Link from 'next/link';
-import { Eye, EyeOff, Loader2, Mail, Lock, User, Building2, AlertCircle, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Mail, Lock, User, Building2, Phone, AlertCircle, ArrowRight } from 'lucide-react';
 import { loginAction, signupAction, type AuthState } from '@/lib/auth-actions';
 import { SocialLoginButtons } from '@/components/social-login-buttons';
 
@@ -77,6 +77,30 @@ export function AuthForm({ mode, next }: { mode: 'login' | 'signup'; next?: stri
         </div>
         {fe.email && <p className="mt-1 text-xs text-danger">{fe.email}</p>}
       </div>
+
+      {mode === 'signup' && (
+        <div>
+          <label className={labelCls} htmlFor="phone">Phone number</label>
+          <div className="relative">
+            <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              inputMode="tel"
+              required
+              placeholder="+1 415 555 2671"
+              className={field}
+            />
+          </div>
+          {fe.phone ? (
+            <p className="mt-1 text-xs text-danger">{fe.phone}</p>
+          ) : (
+            <p className="mt-1 text-xs text-muted">Include your country code — we&apos;ll text a verification code.</p>
+          )}
+        </div>
+      )}
 
       <div>
         <div className="flex items-center justify-between">
