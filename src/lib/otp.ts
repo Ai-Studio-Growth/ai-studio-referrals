@@ -63,7 +63,7 @@ async function dispatch(code: string, email: string, phone?: string | null) {
   const body = `Your Ai Studio verification code is ${code}. It expires in 10 minutes.`;
 
   const tasks: Promise<unknown>[] = [getEmailAdapter().send({ to: email, subject, html })];
-  if (phone) tasks.push(getWhatsAppAdapter().send({ to: phone, body }));
+  if (phone) tasks.push(getWhatsAppAdapter().send({ to: phone, body, code }));
   // Best-effort delivery — never let a provider hiccup throw out of the auth flow.
   await Promise.allSettled(tasks);
 }
